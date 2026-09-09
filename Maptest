@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>店舗並び替えデモ(現在地に近い順)</title>
+<style>
+  :root {
+    --accent: #111;
+    --bg: #f7f7f5;
+    --card-bg: #fff;
+    --border: #e2e2e0;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Zen Kaku Gothic Antique", "Hiragino Sans", sans-serif;
+    background: var(--bg);
+    color: #222;
+    margin: 0;
+    padding: 24px 16px 80px;
+    line-height: 1.7;
+  }
+  h1 { font-size: 1.15rem; margin-bottom: 4px; }
+  .lead { font-size: 0.85rem; color: #666; margin-bottom: 20px; }
+  #status {
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+    background: #eef0ff;
+    border: 1px solid #cfd4ff;
+  }
+  #status.error { background: #fdeceb; border-color: #f3c6c2; color: #9b2f28; }
+  #status.success { background: #eaf7ee; border-color: #bfe6cb; color: #1e6b39; }
+  button#retry {
+    margin-top: 10px;
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: 1px solid var(--accent);
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.8rem;
+    cursor: pointer;
+  }
+  ul#store-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .store-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .store-card .rank { font-weight: 700; color: #999; font-size: 0.9rem; min-width: 28px; }
+  .store-card .name { flex: 1; font-weight: 600; }
+  .store-card .dist { font-size: 0.8rem; color: #555; white-space: nowrap; }
+  .store-card.nearest { border-color: #111; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+  .store-card.nearest .rank { color: #111; }
+</style>
+</head>
+<body>
+
+  <h1>店舗一覧 デモ:現在地に近い順で並び替え</h1>
+  <p class="lead">
+    「位置情報を許可」を押すと、ブラウザのGeolocation API(端末の位置情報を取得する仕組み)で現在地を取得し、
+    8店舗をHaversine公式(2点の緯度経度から距離を算出する数式)で計算した近い順に並び替えます。
+  </p>
+
+  <div id="status">位置情報はまだ取得していません。下のボタンを押してください。</div>
+  <button id="retry">現在地から近い順に並び替える</button>
+
+  <ul id="store-list"></ul>
